@@ -2,7 +2,6 @@ from collections import Counter, defaultdict
 import math, re, functools, bisect
 from typing import Dict, Generator, Any, Iterable, List, Tuple
 import tqdm
-from util import *
 
 prev = [30, 119]
 cur = [30, 120]

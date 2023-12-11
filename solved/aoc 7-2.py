@@ -2,7 +2,6 @@ from collections import Counter
 import math, re, functools, bisect
 from typing import Generator, Any, Iterable, List, Tuple
 import tqdm
-from util import *
 
 with open("input.txt", "r") as file_in:
     lines = [line.strip().split() for line in file_in]

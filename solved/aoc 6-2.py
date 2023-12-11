@@ -1,7 +1,6 @@
 import math, re, functools, bisect
 from typing import Generator, Any, Iterable, List
 import tqdm
-from util import *
 
 with open("input.txt", "r") as file_in:
     lines = [line.strip() for line in file_in if line.strip()]
