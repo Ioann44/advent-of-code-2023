@@ -3,4 +3,4 @@ out/
 *.cpp
 *.py
 *.txt
-!solved/*
+!solved/**

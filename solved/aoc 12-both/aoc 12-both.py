@@ -19,7 +19,7 @@ for row, segs in tqdm(lines):
     
     n = len(row) + 1
     m = len(segs) + 1
-    # 21 * 21 * 7 in worst case
+    # 21 * 21 * 7 in worst case (x 125 for part 2)
     dp = [[[0] * m for j in range(n)] for i in range(n)]
     dp[0][0][0] = 1
 
