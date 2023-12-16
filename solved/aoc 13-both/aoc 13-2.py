@@ -16,6 +16,7 @@ res = 0
 symbs = ".#"
 MOD = int(1e9 + 7)
 PRIME = 17
+# PRIME = 31
 
 
 def get_hash(l: int, r: int, hsh_arr: List[int], reversed=False) -> int:
@@ -37,11 +38,12 @@ def check_hashes_are_equal(i: int, hsh: List[int], hsh_rev: List[int]) -> bool:
     return hsh_left == hsh_right
 
 
-for data_set in data:
+for data_set in tqdm(data):
     n = len(data_set)
     m = len(data_set[0])
 
     # vertical
+    vertical_symmetry = 0
     hsh_vert = [0] * m
     for j in range(m):
         hsh_vert[j] = hsh_vert[j - 1] * PRIME if j > 0 else 0
@@ -56,9 +58,11 @@ for data_set in data:
     # vertical check
     for j in range(1, m):
         if check_hashes_are_equal(j, hsh_vert, hsh_rev_vert):
-            res += j
+            vertical_symmetry = j
+            break
 
     # horizontal
+    horizontal_symmetry = 0
     hsh_hor = [0] * n
     for i in range(n):
         hsh_hor[i] = hsh_hor[i - 1] * PRIME if i > 0 else 0
@@ -73,6 +77,49 @@ for data_set in data:
     # horizontal check
     for i in range(1, n):
         if check_hashes_are_equal(i, hsh_hor, hsh_rev_hor):
-            res += 100 * i
+            horizontal_symmetry = i
+            break
+
+    done = False
+    for i in range(n):
+        if done:
+            break
+        for j in range(m):
+            if done:
+                break
+            hsh_hor_copy = hsh_hor[:]
+            hsh_rev_hor_copy = hsh_rev_hor[:]
+            hsh_vert_copy = hsh_vert[:]
+            hsh_rev_vert_copy = hsh_rev_vert[:]
+
+            old_ch = data_set[i][j]
+            mul = 1 if old_ch == "." else -1
+            for j2 in range(m):
+                if j2 >= j:
+                    hsh_vert_copy[j2] += mul * (1 << i) * PRIME ** (j2 - j)
+                    hsh_vert_copy[j2] %= MOD
+                if j2 <= j:
+                    hsh_rev_vert_copy[j2] += mul * (1 << i) * PRIME ** (j - j2)
+                    hsh_rev_vert_copy[j2] %= MOD
+            for i2 in range(n):
+                if i2 >= i:
+                    hsh_hor_copy[i2] += mul * (1 << j) * PRIME ** (i2 - i)
+                    hsh_hor_copy[i2] %= MOD
+                if i2 <= i:
+                    hsh_rev_hor_copy[i2] += mul * (1 << j) * PRIME ** (i - i2)
+                    hsh_rev_hor_copy[i2] %= MOD
+
+            for j3 in range(1, m):
+                if check_hashes_are_equal(j3, hsh_vert_copy, hsh_rev_vert_copy):
+                    if vertical_symmetry != j3:
+                        res += j3
+                        done = True
+                        break
+            for i3 in range(1, n):
+                if check_hashes_are_equal(i3, hsh_hor_copy, hsh_rev_hor_copy):
+                    if horizontal_symmetry != i3:
+                        res += 100 * i3
+                        done = True
+                        break
 
 print(res)
